@@ -43,6 +43,9 @@ public class TodoSteps
             while (element == null)
             {
                 element = driver.FindElement(by);
+                
+                if (element.Displayed) return;
+                element = null;
             }
         }).Wait(TimeSpan.FromSeconds(timeout));
 
@@ -60,7 +63,8 @@ public class TodoSteps
     [When(@"I enter a title in the title box")]
     public async void WhenIEnterATitleInTheTitleBox()
     {
-        var todoTitleTextBox =  WaitForElement(driver, By.Id("todoTitleTxt"), 3);
+        var todoTitleTextBox =  WaitForElement(driver, By.Id("todoTitleTxt"), 5);
+        Assert.That(todoTitleTextBox, Is.Not.Null);
         todoTitleTextBox.SendKeys(_todoTitle);
     }
 
@@ -83,6 +87,7 @@ public class TodoSteps
     [Then(@"The new todo will have saved correctly to the database")]
     public void ThenTheNewTodoWillHaveSavedCorrectlyToTheDatabase()
     { 
+        Task.Delay(100);
         _taskID = _todoDbService.GetTodoIdByTitleAndDescription(_todoTitle, _todoDescription);
         Assert.That(_taskID, Is.Not.EqualTo(0));
     }
@@ -107,6 +112,7 @@ public class TodoSteps
     [When(@"Click the delete button")]
     public void WhenClickTheDeleteButton()
     {
+        Task.Delay(100);
         var todoCard = driver.FindElements(By.CssSelector(".todo-card"))
             .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
         var deleteButton = todoCard.FindElement(By.CssSelector(".card-delete-button"));
@@ -123,9 +129,19 @@ public class TodoSteps
     [Then(@"the todo should no longer exist on the web page")]
     public void ThenTheTodoShouldNoLongerExistOnTheWebPage()
     {
-        var cardExists = driver.FindElements(By.CssSelector(".todo-card"))
-            .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
-       Assert.That(cardExists, Is.Null);
+        Task.Delay(100);
+        var cardExists =false;
+
+        try
+        {
+            var todoCards = driver.FindElements(By.CssSelector(".todo-card"));
+            cardExists = todoCards.Any(e => e.GetAttribute("id") == _taskID.ToString());
+        }
+        catch (StaleElementReferenceException)
+        {
+            cardExists = false;
+        }
+        Assert.That(cardExists, Is.False, $"card should not exist after deletion but did: card #{_taskID}");
     }
     
     [TearDown]

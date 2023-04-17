@@ -11,5 +11,5 @@ Scenario: Create A Todo
 	Then The new todo will have saved correctly to the database
 	When The new todo exists on the webpage
 		And Click the delete button
-	Then the todo should not exist in the database
-		And the todo should no longer exist on the web page
+	Then the todo should no longer exist on the web page
+		And the todo should not exist in the database
