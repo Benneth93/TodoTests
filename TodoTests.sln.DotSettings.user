@@ -4,8 +4,9 @@
     &lt;TestId&gt;NUnit3x::95B2D9E5-E984-47A3-A3AA-032D04553226::net7.0::TodoTests.Features.Todo.TodoFeature.CreateATodo&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=48c44808_002D98d7_002D42c6_002Db766_002D117d68696352/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Nothing /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d25fcb17_002Db243_002D4757_002Dab89_002Dafcb23aba7da/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CreateATodo #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::95B2D9E5-E984-47A3-A3AA-032D04553226::net7.0::TodoTests.Features.Todo.TodoFeature.CreateATodo&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+  &lt;Project Location="C:\Users\murph\RiderProjects\TodoTests\TodoTests" Presentation="&amp;lt;TodoTests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

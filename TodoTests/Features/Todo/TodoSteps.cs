@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using TechTalk.SpecFlow;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -33,38 +34,33 @@ public class TodoSteps
         driver.Navigate().GoToUrl("http://localhost:4200/todos");
     }
 
-    public static async Task<IWebElement> WaitForElementAsync(IWebDriver driver, By by, TimeSpan timeout)
+    public static IWebElement WaitForElement(IWebDriver driver, By by, int timeout)
     {
-        var wait = new WebDriverWait(driver, timeout);
-        return await wait.Until(async (d) =>
+        IWebElement element = null;
+        
+        Task.Run(() =>
         {
-            try
+            while (element == null)
             {
-                var element =  d.FindElement(by);
-                if (element != null && element.Displayed)
-                {
-                    return element;
-                }
-                return null;
+                element = driver.FindElement(by);
             }
-            catch (NoSuchElementException)
-            {
-                return null;
-            }
-        });
+        }).Wait(TimeSpan.FromSeconds(timeout));
+
+        return element;
     }
 
     [Given(@"I click on the New Todo button")]
     public async void GivenIClickOnTheNewTodoButton()
     {
-        var createButton =  await WaitForElementAsync(driver,By.Id("createNewTodoBtn"), TimeSpan.FromSeconds(3));
+        var createButton =   WaitForElement(driver,By.Id("createNewTodoBtn"), 3);
+        Assert.That(createButton, Is.Not.Null);
         createButton.Click();
     }
 
     [When(@"I enter a title in the title box")]
     public async void WhenIEnterATitleInTheTitleBox()
     {
-        var todoTitleTextBox = await WaitForElementAsync(driver, By.Id("todoTitleTxt"), TimeSpan.FromSeconds(3));
+        var todoTitleTextBox =  WaitForElement(driver, By.Id("todoTitleTxt"), 3);
         todoTitleTextBox.SendKeys(_todoTitle);
     }
 
@@ -72,7 +68,7 @@ public class TodoSteps
     public async void WhenIEnterADescriptionInTheDescriptionBox()
     {
         var todoDescriptionTextBox =
-            await WaitForElementAsync(driver, By.Id("todoDescruotuibTxt"), TimeSpan.FromSeconds(3));
+             WaitForElement(driver, By.Id("todoDescruotuibTxt"), 3);
         
         todoDescriptionTextBox.SendKeys(_todoDescription);
     }
@@ -80,7 +76,7 @@ public class TodoSteps
     [When(@"I click the save button")]
     public async void WhenIClickTheSaveButton()
     {
-        var saveButton = await WaitForElementAsync(driver, By.Id("todoSaveBtn"), TimeSpan.FromSeconds(3));
+        var saveButton = WaitForElement(driver, By.Id("todoSaveBtn"), 3);
         saveButton.Click();
     }
 
