@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 using TechTalk.SpecFlow;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -20,8 +21,9 @@ public class TodoSteps
     
     private TodoSteps()
     {
+        var configuration = TestHelper.GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
         driver = new ChromeDriver();
-        _todoDbService = new TodoDatabaseService();
+        _todoDbService = new TodoDatabaseService(configuration);
         
         _todoTitle = StringTools.GenerateRandomStringOfLength(10);
         _todoDescription = StringTools.GenerateRandomStringOfLength(10);
@@ -103,6 +105,7 @@ public class TodoSteps
     [When(@"The new todo exists on the webpage")]
     public void WhenTheNewTodoExistsOnTheWebpage()
     {
+        Thread.Sleep(10);
         var todoCards = driver.FindElements(By.CssSelector(".todo-card"));
         var todoCard = todoCards.FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
         
@@ -112,7 +115,7 @@ public class TodoSteps
     [When(@"Click the delete button")]
     public void WhenClickTheDeleteButton()
     {
-        Task.Delay(100);
+        
         var todoCard = driver.FindElements(By.CssSelector(".todo-card"))
             .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
         var deleteButton = todoCard.FindElement(By.CssSelector(".card-delete-button"));

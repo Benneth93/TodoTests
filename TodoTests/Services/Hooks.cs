@@ -7,6 +7,5 @@ public static class Hooks
     [BeforeTestRun]
     public static void SetUp()
     {
-        SettingsRetrievalService.SettingsRetrievalServiceConfigure();
     }
 }
