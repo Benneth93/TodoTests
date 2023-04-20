@@ -8259,11 +8259,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\murph\\RiderProjects\\TodoTests\\TodoTests\\TodoTests.csproj",
+      "projectUniqueName": "C:\\Projects\\TodoTests\\TodoTests\\TodoTests.csproj",
       "projectName": "TodoTests",
-      "projectPath": "C:\\Users\\murph\\RiderProjects\\TodoTests\\TodoTests\\TodoTests.csproj",
+      "projectPath": "C:\\Projects\\TodoTests\\TodoTests\\TodoTests.csproj",
       "packagesPath": "C:\\Users\\murph\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\murph\\RiderProjects\\TodoTests\\TodoTests\\obj\\",
+      "outputPath": "C:\\Projects\\TodoTests\\TodoTests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\murph\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -8369,7 +8369,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

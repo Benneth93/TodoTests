@@ -115,7 +115,7 @@ public class TodoSteps
     [When(@"Click the delete button")]
     public void WhenClickTheDeleteButton()
     {
-        
+        Thread.Sleep(100);
         var todoCard = driver.FindElements(By.CssSelector(".todo-card"))
             .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
         var deleteButton = todoCard.FindElement(By.CssSelector(".card-delete-button"));
@@ -132,7 +132,7 @@ public class TodoSteps
     [Then(@"the todo should no longer exist on the web page")]
     public void ThenTheTodoShouldNoLongerExistOnTheWebPage()
     {
-        Task.Delay(100);
+        Thread.Sleep(100);
         var cardExists =false;
 
         try
@@ -147,7 +147,7 @@ public class TodoSteps
         Assert.That(cardExists, Is.False, $"card should not exist after deletion but did: card #{_taskID}");
     }
     
-    [TearDown]
+    [AfterScenario]
     public void TeardownTest()
     {
         driver.Close();

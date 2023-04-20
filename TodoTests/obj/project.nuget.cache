@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/QPeAJHGYpdBMsJw8s8MM/iQFE8RHprerWyughMkeCVeI8pE+CrLUqQhHtyg4OPl7i6wYebzcw3v0zBNhEcO+g==",
+  "dgSpecHash": "KNsjZgUpKehP1iC4ilub+x33fSU+hYB/JgkT0825xyef097z6Qsi3KhZAv9T9RB7ftyMtO6xIuRsWuQKngHLBw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\murph\\RiderProjects\\TodoTests\\TodoTests\\TodoTests.csproj",
+  "projectFilePath": "C:\\Projects\\TodoTests\\TodoTests\\TodoTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\murph\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\murph\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
