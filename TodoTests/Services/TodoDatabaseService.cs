@@ -16,15 +16,28 @@ public class TodoDatabaseService : ITodoRepository
         var optionsBuilder = new DbContextOptionsBuilder<ToDoDbContext>();
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("TododbConnectionString"));
         _todoDbContext = new ToDoDbContext(optionsBuilder.Options);
+        _todoDbContext.ChangeTracker.QueryTrackingBehavior =QueryTrackingBehavior.NoTracking;
+        
     }
     
     public int GetTodoIdByTitleAndDescription(string title, string description)
     {
-        return  _todoDbContext.Tasks.FirstOrDefault(t => t.Title == title && t.Description == description).TaskID;
+        var taskID = _todoDbContext.Tasks.FirstOrDefault(t => t.Title == title && t.Description == description).TaskID;
+        _todoDbContext.Database.CloseConnection();
+        return taskID;
+    }
+
+    //Returns task and it's details
+    public TodoTask GetTaskById(int id)
+    {
+        var task = _todoDbContext.Tasks.FirstOrDefault(t => t.TaskID == id);
+        return task;
     }
     
+    //returns True if the task exists in the database
     public bool GetTodoExistsById(int id)
     {
-        return _todoDbContext.Tasks.Any(t => t.TaskID == id);
+        var exists =_todoDbContext.Tasks.Any(t => t.TaskID == id);
+        return exists;
     }
 }

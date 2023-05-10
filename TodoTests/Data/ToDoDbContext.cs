@@ -1,8 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using TodoTests.Services;
 
 namespace TodoApp.Data;
 

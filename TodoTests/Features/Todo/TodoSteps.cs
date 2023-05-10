@@ -74,7 +74,7 @@ public class TodoSteps
     public async void WhenIEnterADescriptionInTheDescriptionBox()
     {
         var todoDescriptionTextBox =
-             WaitForElement(driver, By.Id("todoDescruotuibTxt"), 3);
+             WaitForElement(driver, By.Id("todoDescriptionTxt"), 3);
         
         todoDescriptionTextBox.SendKeys(_todoDescription);
     }
@@ -102,7 +102,7 @@ public class TodoSteps
         //ScenarioContext.StepIsPending();
     }
 
-    [When(@"The new todo exists on the webpage")]
+    [Then(@"The new todo exists on the webpage")]
     public void WhenTheNewTodoExistsOnTheWebpage()
     {
         Thread.Sleep(10);
@@ -147,6 +147,49 @@ public class TodoSteps
         Assert.That(cardExists, Is.False, $"card should not exist after deletion but did: card #{_taskID}");
     }
     
+    [When(@"I click on the edit button")]
+    public void ThenIClickOnTheUpdateButton()
+    {
+        Thread.Sleep(100);
+        var todoCard = driver.FindElements(By.CssSelector(".todo-card"))
+            .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
+        var editButton = todoCard.FindElement(By.CssSelector(".card-edit-button"));
+        
+        editButton.Click();
+    }
+
+    [When(@"I enter details on the update model")]
+    public void ThenIEnterDetailsOnTheUpdateModel()
+    {
+        _todoTitle = StringTools.GenerateRandomStringOfLength(10);
+        _todoDescription = StringTools.GenerateRandomStringOfLength(10);
+        
+        var todoTitleTextBox =  WaitForElement(driver, By.Id("todoTitleTxt"), 5);
+        Assert.That(todoTitleTextBox, Is.Not.Null);
+        todoTitleTextBox.Clear();
+        todoTitleTextBox.SendKeys(_todoTitle);
+        
+        var todoDescriptionTextBox =
+            WaitForElement(driver, By.Id("todoDescriptionTxt"), 3);
+        
+        todoDescriptionTextBox.Clear();
+        todoDescriptionTextBox.SendKeys(_todoDescription);
+    }
+
+    
+    [Then(@"The updated todo will be saved to the database")]
+    public void ThenTheUpdatedTodoWillBeSavedToTheDatabase()
+    {
+        Thread.Sleep(3000);
+        var todo = _todoDbService.GetTaskById(_taskID);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(todo.Title, Is.EqualTo(_todoTitle));
+            Assert.That(todo.Description, Is.EqualTo(_todoDescription));
+        });
+    }
+
     [AfterScenario]
     public void TeardownTest()
     {

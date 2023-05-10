@@ -4,6 +4,8 @@
     &lt;TestId&gt;NUnit3x::95B2D9E5-E984-47A3-A3AA-032D04553226::net7.0::TodoTests.Features.Todo.TodoFeature.CreateATodo&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestRunner/SpawnedProcessesKnownList/=chromedriver_002Eexe/@EntryIndexedValue">KillOrphaned</s:String>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestRunner/SpawnedProcessesKnownList/=conhost_002Eexe/@EntryIndexedValue">KillOrphaned</s:String>
 	
 	
 	</wpf:ResourceDictionary>
