@@ -4,6 +4,7 @@ using TechTalk.SpecFlow;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+using TodoTests.Pages;
 using TodoTests.Services;
 using TodoTests.Tools;
 
@@ -13,16 +14,17 @@ namespace TodoTests;
 [Binding]
 public class TodoSteps
 {
-    private IWebDriver driver;
+    private WebDriver _driver;
     private string _todoTitle;
     private string _todoDescription;
     private TodoDatabaseService _todoDbService;
     private int _taskID;
-    
+
+    private TodoPage _todoPage;
     private TodoSteps()
     {
         var configuration = TestHelper.GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
-        driver = new ChromeDriver();
+        _driver = new ChromeDriver();
         _todoDbService = new TodoDatabaseService(configuration);
         
         _todoTitle = StringTools.GenerateRandomStringOfLength(10);
@@ -32,58 +34,33 @@ public class TodoSteps
     [Given(@"I have navigated to the todo page")]
     public void GivenIHaveNavigatedToTheTodoPage()
     {
-        TestContext.WriteLine("Loading webpage...");
-        driver.Navigate().GoToUrl("http://localhost:4200/todos");
+        _todoPage = new TodoPage(_driver);
     }
 
-    public static IWebElement WaitForElement(IWebDriver driver, By by, int timeout)
-    {
-        IWebElement element = null;
-        
-        Task.Run(() =>
-        {
-            while (element == null)
-            {
-                element = driver.FindElement(by);
-                
-                if (element.Displayed) return;
-                element = null;
-            }
-        }).Wait(TimeSpan.FromSeconds(timeout));
-
-        return element;
-    }
+    
 
     [Given(@"I click on the New Todo button")]
     public async void GivenIClickOnTheNewTodoButton()
     {
-        var createButton =   WaitForElement(driver,By.Id("createNewTodoBtn"), 3);
-        Assert.That(createButton, Is.Not.Null);
-        createButton.Click();
+        _todoPage.ClickNewTodoButton();
     }
 
     [When(@"I enter a title in the title box")]
     public async void WhenIEnterATitleInTheTitleBox()
     {
-        var todoTitleTextBox =  WaitForElement(driver, By.Id("todoTitleTxt"), 5);
-        Assert.That(todoTitleTextBox, Is.Not.Null);
-        todoTitleTextBox.SendKeys(_todoTitle);
+        _todoPage.EnterTitle(_todoTitle);
     }
 
     [When(@"I enter a description in the description box")]
     public async void WhenIEnterADescriptionInTheDescriptionBox()
     {
-        var todoDescriptionTextBox =
-             WaitForElement(driver, By.Id("todoDescriptionTxt"), 3);
-        
-        todoDescriptionTextBox.SendKeys(_todoDescription);
+        _todoPage.EnterDescription(_todoDescription);
     }
 
     [When(@"I click the save button")]
     public async void WhenIClickTheSaveButton()
     {
-        var saveButton = WaitForElement(driver, By.Id("todoSaveBtn"), 3);
-        saveButton.Click();
+       _todoPage.ClickSaveButton();
     }
 
     [Then(@"The new todo will have saved correctly to the database")]
@@ -103,24 +80,19 @@ public class TodoSteps
     }
 
     [Then(@"The new todo exists on the webpage")]
-    public void WhenTheNewTodoExistsOnTheWebpage()
+    public async Task WhenTheNewTodoExistsOnTheWebpage()
     {
         Thread.Sleep(10);
-        var todoCards = driver.FindElements(By.CssSelector(".todo-card"));
-        var todoCard = todoCards.FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
-        
+        var todoCard = await _todoPage.GetTodoElement(_taskID);
         Assert.That(todoCard, Is.Not.Null);
     }
     
     [When(@"Click the delete button")]
-    public void WhenClickTheDeleteButton()
+    public async Task WhenClickTheDeleteButton()
     {
         Thread.Sleep(100);
-        var todoCard = driver.FindElements(By.CssSelector(".todo-card"))
-            .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
-        var deleteButton = todoCard.FindElement(By.CssSelector(".card-delete-button"));
-        
-        deleteButton.Click();
+        var todoCard = await _todoPage.GetTodoElement(_taskID);
+        _todoPage.ClickDeleteButton(todoCard);
     }
 
     [Then(@"the todo should not exist in the database")]
@@ -130,32 +102,20 @@ public class TodoSteps
     }
     
     [Then(@"the todo should no longer exist on the web page")]
-    public void ThenTheTodoShouldNoLongerExistOnTheWebPage()
+    public async Task ThenTheTodoShouldNoLongerExistOnTheWebPage()
     {
         Thread.Sleep(100);
-        var cardExists =false;
-
-        try
-        {
-            var todoCards = driver.FindElements(By.CssSelector(".todo-card"));
-            cardExists = todoCards.Any(e => e.GetAttribute("id") == _taskID.ToString());
-        }
-        catch (StaleElementReferenceException)
-        {
-            cardExists = false;
-        }
+        var cardExists = await _todoPage.GetTodoCardExists(_taskID);
         Assert.That(cardExists, Is.False, $"card should not exist after deletion but did: card #{_taskID}");
     }
     
     [When(@"I click on the edit button")]
-    public void ThenIClickOnTheUpdateButton()
+    public async Task ThenIClickOnTheUpdateButton()
     {
-        Thread.Sleep(100);
-        var todoCard = driver.FindElements(By.CssSelector(".todo-card"))
-            .FirstOrDefault(e => e.GetAttribute("id") == _taskID.ToString());
-        var editButton = todoCard.FindElement(By.CssSelector(".card-edit-button"));
+        Thread.Sleep(300);
         
-        editButton.Click();
+        var todoCard = await _todoPage.GetTodoElement(_taskID);
+        _todoPage.ClickEditButton(todoCard);
     }
 
     [When(@"I enter details on the update model")]
@@ -164,16 +124,8 @@ public class TodoSteps
         _todoTitle = StringTools.GenerateRandomStringOfLength(10);
         _todoDescription = StringTools.GenerateRandomStringOfLength(10);
         
-        var todoTitleTextBox =  WaitForElement(driver, By.Id("todoTitleTxt"), 5);
-        Assert.That(todoTitleTextBox, Is.Not.Null);
-        todoTitleTextBox.Clear();
-        todoTitleTextBox.SendKeys(_todoTitle);
-        
-        var todoDescriptionTextBox =
-            WaitForElement(driver, By.Id("todoDescriptionTxt"), 3);
-        
-        todoDescriptionTextBox.Clear();
-        todoDescriptionTextBox.SendKeys(_todoDescription);
+        _todoPage.EnterTitle(_todoTitle);
+        _todoPage.EnterDescription(_todoDescription);
     }
 
     
@@ -193,6 +145,6 @@ public class TodoSteps
     [AfterScenario]
     public void TeardownTest()
     {
-        driver.Close();
+        _driver.Close();
     }
 }
