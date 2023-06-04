@@ -11,6 +11,4 @@ public static class TestHelper
             .AddJsonFile("appsettings.json", optional: true)
             .Build();
     }
-    
-    
 }
