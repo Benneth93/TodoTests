@@ -11,7 +11,7 @@ using TodoTests.Tools;
 namespace TodoTests;
 
 [Binding]
-public class TodoSteps
+public class TodoUISteps
 {
     private IWebDriver driver;
     private string _todoTitle;
@@ -19,7 +19,7 @@ public class TodoSteps
     private TodoDatabaseService _todoDbService;
     private int _taskID;
     
-    private TodoSteps()
+    private TodoUISteps()
     {
         var configuration = TestHelper.GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
         driver = new ChromeDriver();
