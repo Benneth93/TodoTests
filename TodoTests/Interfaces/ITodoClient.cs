@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using RestSharp;
 using TodoTests.Dtos;
 using TodoTests.Models;
 using TodoTests.Tools;
@@ -7,11 +8,9 @@ namespace TodoTests.Interfaces;
 
 public interface ITodoClient
 {
-    //public void TodoAPIService(IConfiguration configuration);
+    public Task<RestResponse> CreateTodo(CreateTodoDto newTodo);
 
-    public Task<TodoModel> CreateTodo(TodoDto newTodo);
-
-    public List<TodoModel> GetAllTodos();
+    public Task<RestResponse> GetAllTodos();
 
     public TodoModel GetTodoByID(int id);
 
