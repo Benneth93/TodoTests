@@ -47,7 +47,8 @@ public class TodoAPI
     {
         Assert.That(_createTodoResponse.IsSuccessStatusCode, Is.True);
 
-        _createTodoResponseModel = JsonConvert.DeserializeObject < TodoModel>(_createTodoResponse.Content);
+        _createTodoResponseModel = JsonConvert.DeserializeObject <TodoModel>(_createTodoResponse.Content);
+        _scenarioContext["CreatedTodoID"] = _createTodoResponseModel.TaskID;
     }
 
     [Then(@"The response should contain an ID")]
@@ -64,5 +65,36 @@ public class TodoAPI
             Assert.That(_createTodoResponseModel.Title, Is.EqualTo(_createTodoDto.Title));
             Assert.That(_createTodoResponseModel.Description, Is.EqualTo(_createTodoDto.Description));
         });
+    }
+
+    [Given(@"I have an existing todo")]
+    public void GivenIHaveAnExistingTodo()
+    {
+        ScenarioContext.StepIsPending();
+    }
+
+    [Given(@"Data ready to edit that todo")]
+    public void GivenDataReadyToEditThatTodo()
+    {
+        ScenarioContext.StepIsPending();
+    }
+
+    [When(@"I send the request to edit the todo")]
+    public void WhenISendTheRequestToEditTheTodo()
+    {
+        ScenarioContext.StepIsPending();
+    }
+
+
+    [Then(@"The response should be successful")]
+    public void ThenTheResponseShouldBeSuccessful()
+    {
+        ScenarioContext.StepIsPending();
+    }
+
+    [Then(@"The details of the todo should contain the details of the edit")]
+    public void ThenTheDetailsOfTheTodoShouldContainTheDetailsOfTheEdit()
+    {
+        ScenarioContext.StepIsPending();
     }
 }

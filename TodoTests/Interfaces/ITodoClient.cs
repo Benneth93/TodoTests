@@ -12,9 +12,9 @@ public interface ITodoClient
 
     public Task<RestResponse> GetAllTodos();
 
-    public TodoModel GetTodoByID(int id);
+    public Task<RestResponse> GetTodoByID(int id);
 
-    public TodoModel EditTodo(int id, TodoDto todoDto);
+    public Task<RestResponse> EditTodo(TodoDto todoDto);
 
-    public void DeleteTodo(int id);
+    public Task<RestResponse> DeleteTodo(int id);
 }

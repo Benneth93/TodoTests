@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using OpenQA.Selenium;
 using RestSharp;
 using TodoTests.Dtos;
 using TodoTests.Interfaces;
@@ -46,23 +47,34 @@ public class TodoClient : ITodoClient, IDisposable
         }
         catch (Exception e)
         {
-            return await Task.FromException<RestResponse>(new Exception(e.Message));
+            return await Task.FromException<RestResponse>(e);
         }
     }
 
-    public TodoModel GetTodoByID(int id)
+    public async Task<RestResponse> GetTodoByID(int id)
     {
-        return null;
+        throw new NotImplementedException();
     }
 
-    public TodoModel EditTodo(int id, TodoDto todoDto)
+    public async Task<RestResponse> EditTodo(TodoDto todoDto)
     {
-        return null;
-    }
-
-    public void DeleteTodo(int id)
-    {
+        var request = new RestRequest("/UpdateTodo", Method.Patch);
+        request.AddJsonBody(todoDto);
         
+        try
+        {
+            var response =  await _restClient.PatchAsync(request);
+            return response;
+        }
+        catch (Exception e)
+        {
+            return await Task.FromException<RestResponse>(e);
+        }
+    }
+
+    public async Task<RestResponse> DeleteTodo(int id)
+    {
+        throw new NotImplementedException();
     }
 
     record TodoSingleObject<T>(T data);
