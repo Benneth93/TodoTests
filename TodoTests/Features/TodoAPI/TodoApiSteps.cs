@@ -19,7 +19,8 @@ public class TodoApi
     //TODO: Add responses to _scenarioContext
     private RestResponse _createTodoResponse;
     private RestResponse _editTodoResponse;
-    
+    private RestResponse _deleteTodoResponse;
+
     public TodoApi(ScenarioContext scenarioContext)
     {
         var configuration = TestHelper.GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
@@ -121,21 +122,30 @@ public class TodoApi
     }
     
     [When(@"I send a request to delete that todo")]
-    public void WhenISendARequestToDeleteThatTodo()
+    public async Task WhenISendARequestToDeleteThatTodo()
     {
-        ScenarioContext.StepIsPending();
+        _deleteTodoResponse = await _todoService.DeleteTodo(_scenarioContext.Get<TodoModel>("CreateTodoResponseModel").TaskID);
     }
 
     [Then(@"I should get a successful response from the delete")]
     public void ThenIShouldGetASuccessfulResponseFromTheDelete()
     {
-        ScenarioContext.StepIsPending();
+        Assert.That(_deleteTodoResponse.IsSuccessStatusCode, Is.True);
+        _scenarioContext.Add("deletedTodo", JsonConvert.DeserializeObject<DeletedTodoResponseDto>(_deleteTodoResponse.Content));
     }
 
     [Then(@"the details of the todo deleted should be correct")]
     public void ThenTheDetailsOfTheTodoDeletedShouldBeCorrect()
     {
-        ScenarioContext.StepIsPending();
+        var expected = _scenarioContext.Get<TodoModel>("CreateTodoResponseModel");
+        var actual = _scenarioContext.Get<DeletedTodoResponseDto>("deletedTodo");
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(actual.deletedTodo.TaskID, Is.EqualTo(expected.TaskID));
+            Assert.That(actual.deletedTodo.Title, Is.EqualTo(expected.Title));
+            Assert.That(actual.deletedTodo.Description, Is.EqualTo(expected.Description));
+        });
     }
 
     private async Task<TodoModel> CreateTodoData()
