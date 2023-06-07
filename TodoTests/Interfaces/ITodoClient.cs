@@ -1,8 +1,5 @@
-using Microsoft.Extensions.Configuration;
 using RestSharp;
 using TodoTests.Dtos;
-using TodoTests.Models;
-using TodoTests.Tools;
 
 namespace TodoTests.Interfaces;
 
