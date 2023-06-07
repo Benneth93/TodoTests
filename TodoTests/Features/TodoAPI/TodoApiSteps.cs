@@ -77,7 +77,7 @@ public class TodoApi
     [Given(@"I have an existing todo")]
     public async Task GivenIHaveAnExistingTodo()
     {
-        _scenarioContext.Add("TodoForEdit", await CreateTodoData());
+        _scenarioContext.Add("CreateTodoResponseModel", await CreateTodoData());
     }
 
     [Given(@"Data ready to edit that todo")]
@@ -85,7 +85,7 @@ public class TodoApi
     {
         var editedTodo = new TodoDto()
         {
-            TaskID = Convert.ToInt32(_scenarioContext.Get<TodoModel>("TodoForEdit").TaskID),
+            TaskID = Convert.ToInt32(_scenarioContext.Get<TodoModel>("CreateTodoResponseModel").TaskID),
             Title = "Edited Title",
             Description = "Edited Description"
         };
@@ -100,7 +100,7 @@ public class TodoApi
     }
 
 
-    [Then(@"The response should be successful")]
+    [Then(@"The response should be successful from the edit")]
     public void ThenTheResponseShouldBeSuccessful()
     {
         Assert.That(_editTodoResponse.IsSuccessStatusCode, Is.True);
@@ -119,6 +119,24 @@ public class TodoApi
             Assert.That(actual.updatedTodo.Description, Is.EqualTo(expected.Description));
         });
     }
+    
+    [When(@"I send a request to delete that todo")]
+    public void WhenISendARequestToDeleteThatTodo()
+    {
+        ScenarioContext.StepIsPending();
+    }
+
+    [Then(@"I should get a successful response from the delete")]
+    public void ThenIShouldGetASuccessfulResponseFromTheDelete()
+    {
+        ScenarioContext.StepIsPending();
+    }
+
+    [Then(@"the details of the todo deleted should be correct")]
+    public void ThenTheDetailsOfTheTodoDeletedShouldBeCorrect()
+    {
+        ScenarioContext.StepIsPending();
+    }
 
     private async Task<TodoModel> CreateTodoData()
     {
@@ -133,6 +151,12 @@ public class TodoApi
 
         return JsonConvert.DeserializeObject<TodoModel>(response.Content);
     }
+
+    [AfterScenario("CleardownTodo")]
+    private async Task DeleteTodo()
+    {
+        var response = await _todoService.DeleteTodo(_scenarioContext.Get<TodoModel>("CreateTodoResponseModel").TaskID);
+        Assert.That(response.IsSuccessStatusCode);
+    }
     
-    //TODO: Add method as hook to delete after test run
 }

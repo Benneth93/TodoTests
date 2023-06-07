@@ -74,7 +74,17 @@ public class TodoClient : ITodoClient, IDisposable
 
     public async Task<RestResponse> DeleteTodo(int id)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest($"/DeleteTodo?id={id}");
+
+        try
+        {
+            var response = await _restClient.DeleteAsync(request);
+            return response;
+        }
+        catch (Exception e)
+        {
+            return await Task.FromException<RestResponse>(e);
+        }
     }
 
     record TodoSingleObject<T>(T data);
