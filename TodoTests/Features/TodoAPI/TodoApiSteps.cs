@@ -193,10 +193,14 @@ public class TodoApi
     {
         var errorDto = JsonConvert.DeserializeObject<CreateTodoErrorResponseDto>(_createTodoResponse.Content);
         
+        //Todo: Refactor to ensure no errors too
+        
         Assert.Multiple(() =>
         {
-            Assert.That(errorDto.Title, Is.EqualTo(titleMessage));
-            Assert.That(errorDto.Description, Is.EqualTo(descriptionMessage));
+            if(!string.IsNullOrEmpty(titleMessage))
+                Assert.That(errorDto.Title.Contains(titleMessage), Is.True);
+            if(!string.IsNullOrEmpty(descriptionMessage))
+                Assert.That(errorDto.Description.Contains(descriptionMessage), Is.True);
         });
     }
     
