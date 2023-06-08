@@ -32,6 +32,8 @@ Scenario Outline: Validation error messages for creation of a Todo
 	Examples:
 	| TitleLength | DescriptionLength | ResponseCode | TitleMessage                                                                 | DescriptionMessage                                                   |
 	| 2           | 10                | 400          | The field Title must be a string or array type with a minimum length of '3'. |                                                                      |
-	| 10          | 505               | 400          |                                                                              | The field Description must be a string with a maximum length of 500. |
-	| 1           | 505               | 400          | The field Title must be a string or array type with a minimum length of '3'. | The field Description must be a string with a maximum length of 500. |
+	| 61          | 10                | 400          | The field Title must be a string with a maximum length of 60.                |                                                                      |
+	| 10          | 501               | 400          |                                                                              | The field Description must be a string with a maximum length of 500. |
+	| 1           | 501               | 400          | The field Title must be a string or array type with a minimum length of '3'. | The field Description must be a string with a maximum length of 500. |
+	| 61          | 501               | 400          | The field Title must be a string with a maximum length of 60.                | The field Description must be a string with a maximum length of 500. |
 	 
