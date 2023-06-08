@@ -1,10 +1,7 @@
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using OpenQA.Selenium;
 using RestSharp;
 using TodoTests.Dtos;
 using TodoTests.Interfaces;
-using TodoTests.Models;
 using TodoTests.Tools;
 
 namespace TodoTests.Clients;
@@ -59,7 +56,6 @@ public class TodoClient : ITodoClient, IDisposable
         return response;
     }
 
-    record TodoSingleObject<T>(T data);
     public void Dispose()
     {
         _restClient?.Dispose();

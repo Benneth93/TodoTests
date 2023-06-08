@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using TodoApp.Data;
 using TodoTests.Interfaces;
-using TodoTests.Tools;
 
 namespace TodoTests.Services;
 

@@ -1,9 +1,6 @@
-using System.Security.Cryptography;
-using Microsoft.Extensions.Configuration;
 using TechTalk.SpecFlow;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
 using TodoTests.Services;
 using TodoTests.Tools;
 

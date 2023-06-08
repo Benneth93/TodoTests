@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using TodoApp.Data;
 
 namespace TodoTests.Interfaces;
