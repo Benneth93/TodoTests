@@ -27,28 +27,14 @@ public class TodoClient : ITodoClient, IDisposable
         var request = new RestRequest("/CreateNewTodo", Method.Post);
         request.AddJsonBody(newTodo);
         
-        try
-        {
-           var response = await _restClient.PostAsync(request);
-           return response;
-        }
-        catch (Exception e)
-        {
-            return await Task.FromException<RestResponse>(new Exception(e.Message));
-        }
+        var response = await _restClient.ExecuteAsync(request);
+        return response;
     }
 
     public async Task<RestResponse> GetAllTodos()
     {
-        try
-        {
-            var response = await _restClient.GetAsync(new RestRequest("/GetTasks"));
-            return response;
-        }
-        catch (Exception e)
-        {
-            return await Task.FromException<RestResponse>(e);
-        }
+        var response = await _restClient.ExecuteAsync(new RestRequest("/GetTasks"));
+        return response;
     }
 
     public async Task<RestResponse> GetTodoByID(int id)
@@ -60,31 +46,17 @@ public class TodoClient : ITodoClient, IDisposable
     {
         var request = new RestRequest("/UpdateTodo", Method.Patch);
         request.AddJsonBody(todoDto);
-        
-        try
-        {
-            var response =  await _restClient.PatchAsync(request);
-            return response;
-        }
-        catch (Exception e)
-        {
-            return await Task.FromException<RestResponse>(e);
-        }
+       
+        var response =  await _restClient.ExecuteAsync(request);
+        return response;
     }
 
     public async Task<RestResponse> DeleteTodo(int id)
     {
-        var request = new RestRequest($"/DeleteTodo?id={id}");
-
-        try
-        {
-            var response = await _restClient.DeleteAsync(request);
-            return response;
-        }
-        catch (Exception e)
-        {
-            return await Task.FromException<RestResponse>(e);
-        }
+        var request = new RestRequest($"/DeleteTodo?id={id}", Method.Delete);
+        
+        var response = await _restClient.ExecuteAsync(request);
+        return response;
     }
 
     record TodoSingleObject<T>(T data);
