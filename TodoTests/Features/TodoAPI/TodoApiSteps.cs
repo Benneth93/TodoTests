@@ -1,3 +1,4 @@
+using System.Net;
 using Newtonsoft.Json;
 using RestSharp;
 using TechTalk.SpecFlow;
@@ -34,8 +35,8 @@ public class TodoApi
     {
         var data = new CreateTodoDto()
         {
-            Title = "Title: API Test",
-            Description = "Description: API Test"
+            Title = Tools.StringTools.GenerateRandomStringOfLength(10),
+            Description = Tools.StringTools.GenerateRandomStringOfLength(10)
         };
         _scenarioContext.Add("createTodoDto",data);
         
@@ -167,6 +168,36 @@ public class TodoApi
     {
         var response = await _todoService.DeleteTodo(_scenarioContext.Get<TodoModel>("CreateTodoResponseModel").TaskID);
         Assert.That(response.IsSuccessStatusCode);
+    }
+
+    [Given(@"I have a new task to create with (.*) and (.*)")]
+    public void GivenIHaveANewTaskToCreateWithAnd(int titleLength, int descriptionLength)
+    {
+        var data = new CreateTodoDto()
+        {
+            Title = Tools.StringTools.GenerateRandomStringOfLength(titleLength),
+            Description = Tools.StringTools.GenerateRandomStringOfLength(descriptionLength)
+        };
+        _scenarioContext.Add("createTodoDto",data);
+        
+    }
+
+    [Then(@"I should get an unsuccessful response of (.*)")]
+    public void ThenIShouldGetAnUnsuccessfulResponseOf(HttpStatusCode expectedStatusCode)
+    {
+        Assert.That(_createTodoResponse.StatusCode, Is.EqualTo(expectedStatusCode));
+    }
+
+    [Then(@"The response should contain an error message with '(.*)' and '(.*)'")]
+    public void ThenTheResponseShouldContainAnErrorMessageWith(string titleMessage, string descriptionMessage )
+    {
+        var errorDto = JsonConvert.DeserializeObject<CreateTodoErrorResponseDto>(_createTodoResponse.Content);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(errorDto.Title, Is.EqualTo(titleMessage));
+            Assert.That(errorDto.Description, Is.EqualTo(descriptionMessage));
+        });
     }
     
 }
