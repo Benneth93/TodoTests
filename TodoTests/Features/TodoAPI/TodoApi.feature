@@ -26,8 +26,8 @@ Scenario: Delete an existing Todo
 Scenario Outline: Validation error messages for creation of a Todo
 	Given I have a new task to create with <TitleLength> and <DescriptionLength>
 	When I send a request to create a new todo with the task details
-	Then I should get an unsuccessful response of <ResponseCode>
-		And The response should contain an error message with '<TitleMessage>' and '<DescriptionMessage>'
+	Then I should get an unsuccessful create response of <ResponseCode>
+		And The create response should contain an error message with '<TitleMessage>' and '<DescriptionMessage>'
 	
 	Examples:
 	| TitleLength | DescriptionLength | ResponseCode | TitleMessage                                                                 | DescriptionMessage                                                   |
@@ -36,4 +36,18 @@ Scenario Outline: Validation error messages for creation of a Todo
 	| 10          | 501               | 400          |                                                                              | The field Description must be a string with a maximum length of 500. |
 	| 1           | 501               | 400          | The field Title must be a string or array type with a minimum length of '3'. | The field Description must be a string with a maximum length of 500. |
 	| 61          | 501               | 400          | The field Title must be a string with a maximum length of 60.                | The field Description must be a string with a maximum length of 500. |
-	 
+
+Scenario Outline: Validation error messages for update of a Todo
+	Given I have an existing todo
+		And Data ready to edit that todo with <TitleLength> and <DescriptionLength>
+	When I send the request to edit the todo
+	Then I should get an unsuccessful update response of <ReasonCode>
+		And The update response should contain an error message with '<TitleMessage>' and '<DescriptionMessage>'
+		
+	Examples:
+	  | TitleLength | DescriptionLength | ResponseCode | TitleMessage                                                                 | DescriptionMessage                                                   |
+	  | 2           | 10                | 400          | The field Title must be a string or array type with a minimum length of '3'. |                                                                      |
+	  | 61          | 10                | 400          | The field Title must be a string with a maximum length of 60.                |                                                                      |
+	  | 10          | 501               | 400          |                                                                              | The field Description must be a string with a maximum length of 500. |
+	  | 1           | 501               | 400          | The field Title must be a string or array type with a minimum length of '3'. | The field Description must be a string with a maximum length of 500. |
+	  | 61          | 501               | 400          | The field Title must be a string with a maximum length of 60.                | The field Description must be a string with a maximum length of 500. |

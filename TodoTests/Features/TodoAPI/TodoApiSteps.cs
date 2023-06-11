@@ -182,18 +182,16 @@ public class TodoApi
         
     }
 
-    [Then(@"I should get an unsuccessful response of (.*)")]
-    public void ThenIShouldGetAnUnsuccessfulResponseOf(HttpStatusCode expectedStatusCode)
+    [Then(@"I should get an unsuccessful create response of (.*)")]
+    public void ThenIShouldGetAnUnsuccessfulCreateResponseOf(HttpStatusCode expectedStatusCode)
     {
         Assert.That(_createTodoResponse.StatusCode, Is.EqualTo(expectedStatusCode));
     }
 
-    [Then(@"The response should contain an error message with '(.*)' and '(.*)'")]
-    public void ThenTheResponseShouldContainAnErrorMessageWith(string titleMessage, string descriptionMessage )
+    [Then(@"The create response should contain an error message with '(.*)' and '(.*)'")]
+    public void ThenTheCreateResponseShouldContainAnErrorMessageWith(string titleMessage, string descriptionMessage )
     {
         var errorDto = JsonConvert.DeserializeObject<CreateTodoErrorResponseDto>(_createTodoResponse.Content);
-        
-        //Todo: Refactor to ensure no errors too
         
         Assert.Multiple(() =>
         {
@@ -203,5 +201,39 @@ public class TodoApi
                 Assert.That(errorDto.Description.Contains(descriptionMessage), Is.True);
         });
     }
-    
+
+    [Given(@"Data ready to edit that todo with (.*) and (.*)")]
+    public void GivenDataReadyToEditThatTodoWithAnd(int titleLength, int descriptionLength)
+    {
+        var editedTodo = new TodoDto()
+        {
+            TaskID = Convert.ToInt32(_scenarioContext.Get<TodoModel>("CreateTodoResponseModel").TaskID),
+            Title = Tools.StringTools.GenerateRandomStringOfLength(titleLength),
+            Description = Tools.StringTools.GenerateRandomStringOfLength(descriptionLength)
+        };
+        
+        _scenarioContext.Add("EditedTodo", editedTodo);
+    }
+
+    [Then(@"I should get an unsuccessful update response of (.*)")]
+    public void ThenIShouldGetAnUnsuccessfulUpdateResponseOf(string reasonCode)
+    {
+        Assert.That(_editTodoResponse.IsSuccessStatusCode, Is.False);
+        _scenarioContext.Add("EditedTodoResponseDto",JsonConvert.DeserializeObject<EditTodoResponseDto>(_editTodoResponse.Content));
+    }
+
+    [Then(@"The update response should contain an error message with '(.*)' and '(.*)'")]
+    public void ThenTheUpdateResponseShouldContainAnErrorMessageWith(string titleMessage, string descriptionMessage)
+    {
+        //Todo: need to update this to specific errorDto for update to include the required ID messages
+        var errorDto = JsonConvert.DeserializeObject<CreateTodoErrorResponseDto>(_editTodoResponse.Content);
+        
+        Assert.Multiple(() =>
+        {
+            if(!string.IsNullOrEmpty(titleMessage))
+                Assert.That(errorDto.Title.Contains(titleMessage), Is.True);
+            if(!string.IsNullOrEmpty(descriptionMessage))
+                Assert.That(errorDto.Description.Contains(descriptionMessage), Is.True);
+        });
+    }
 }
