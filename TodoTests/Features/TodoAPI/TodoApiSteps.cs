@@ -1,4 +1,5 @@
 using System.Net;
+using Gherkin.CucumberMessages.Types;
 using Newtonsoft.Json;
 using RestSharp;
 using TechTalk.SpecFlow;

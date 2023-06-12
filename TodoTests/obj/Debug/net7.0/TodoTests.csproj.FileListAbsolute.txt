@@ -331,3 +331,4 @@ C:\Users\murph\RiderProjects\TodoTests\TodoTests\obj\Debug\net7.0\ref\TodoTests.
 C:\Users\murph\RiderProjects\TodoTests\TodoTests\bin\Debug\net7.0\appsettings.json
 C:\Projects\TodoTests\TodoTests\bin\Debug\net7.0\appsettings.json
 C:\Projects\TodoTests\TodoTests\bin\Debug\net7.0\RestSharp.dll
+C:\Users\murph\RiderProjects\TodoTests\TodoTests\bin\Debug\net7.0\RestSharp.dll

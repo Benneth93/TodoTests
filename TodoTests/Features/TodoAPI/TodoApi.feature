@@ -37,6 +37,7 @@ Scenario Outline: Validation error messages for creation of a Todo
 	| 1           | 501               | 400          | The field Title must be a string or array type with a minimum length of '3'. | The field Description must be a string with a maximum length of 500. |
 	| 61          | 501               | 400          | The field Title must be a string with a maximum length of 60.                | The field Description must be a string with a maximum length of 500. |
 
+@CleardownTodo
 Scenario Outline: Validation error messages for update of a Todo
 	Given I have an existing todo
 		And Data ready to edit that todo with <TitleLength> and <DescriptionLength>

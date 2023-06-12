@@ -1,3 +1,4 @@
+using Gherkin.CucumberMessages.Types;
 using TechTalk.SpecFlow;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -8,6 +9,7 @@ using TodoTests.Tools;
 namespace TodoTests;
 
 [Binding]
+[Scope(Feature = "TodoUI")]
 public class TodoUISteps
 {
     private IWebDriver driver;

@@ -1,4 +1,4 @@
-Feature: Todo
+Feature: TodoUI
 	Create a todo that can be updated, or deleted
 
 @EndToEnd
